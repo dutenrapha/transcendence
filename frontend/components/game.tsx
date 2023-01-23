@@ -38,7 +38,7 @@ const GameComponent: FC<GameComponentProps> = ({ gateway }) => {
       setPositions(data);
     });
 
-    console
+//    console
 
     return () => {
       socketRef.current.disconnect();
@@ -58,6 +58,7 @@ const GameComponent: FC<GameComponentProps> = ({ gateway }) => {
 
     p5.fill(255);
     p5.frameRate(30);
+
   };
 
   const draw = (p5: p5Types) => {
@@ -66,7 +67,14 @@ const GameComponent: FC<GameComponentProps> = ({ gateway }) => {
       const position = positions[id];
       p5.circle(position.x * p5.width, position.y * p5.height, 10);
     }
+    setInterval(function (p5: p5Types) {
+      socketRef.current.emit("Input_raquete", {
+        x: p5.mouseX,
+        y: p5.mouseY })
+    }
+    , 30)
   };
+
 
   return <Sketch setup={setup} draw={draw} />;
 };

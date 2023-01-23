@@ -47,4 +47,68 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.positions[client.id].x = payload.x;
     this.positions[client.id].y = payload.y;
   }
+
+  @SubscribeMessage('Input_raquete')
+  updateRaquete(client: Socket, payload: any): void {
+    this.logger.debug(`coordinates received: x: ${payload.x} y: ${payload.y}`)
+  }
+
 }
+
+// Recebe conexao
+//  Player impar (envia sinal "player")
+//  Player par (envia sinal "player")
+//  Telespectador (envia sinal "spectator")
+//
+//  no sinal player
+//    push id no vetor de sockets
+//    se for impar manda msg de player left
+//    se for par manda msg de player right
+//  se for impar faz setup do game
+//    Inicializa raquetes
+//    Inicializa bola
+//    Inicializa scores
+//    Cria vetor de players ?
+//    Cria vetor de bola ?
+//    Cria sala de jogo ?
+//
+// Na desconexao
+//    Da vitoria para outro jogador
+//    Retira jogadores do vetor de conexoes
+//
+// No heartbeet
+//  loop para cada sala game
+//    Update raquete left
+//    Update raquete right
+//    Update ball
+//    Update score
+//  Envia estado do mundo (todos juntos ? Ou envia 1 game por vez ?
+//
+//  Cliente no heartbeat
+//    Envia posicao x y ?
+//    Recebe estado do mundo
+//    Limpa canvas
+//    Draw canvas
+//
+//  Cliente envia sinal input_raquete
+//  Servidor no sinal input_raquete:
+//    Atualiza velocidade da raquete em questao
+//
+//
+// Estado do jogo:
+//  raquete_left
+//  raquete_right
+//  bola
+//  id left
+//  id right
+//  id game
+//
+// Retangulo (raquete_left raquete_right bola)
+//    x
+//    y
+//    width
+//    height
+//    vx
+//    vy
+//    score
+//

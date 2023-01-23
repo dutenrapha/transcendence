@@ -42,6 +42,10 @@ up:
 	docker-compose up
 	#docker-compose $(YML) $(ENV) up -d 
 	#docker-compose $(YML) $(ENV) ps -a
+front:
+	docker-compose build frontend
+back:
+	docker-compose build backend
 
 #ps:
 #	docker-compose $(YML) $(ENV) ps -a
