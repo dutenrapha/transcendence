@@ -61,10 +61,12 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.logger.debug(`Length: ${this.SocketIdVector.length}`)
     if (this.SocketIdVector.length % 2 == 1) {
       this.logger.debug('Impar');
-      this.server.emit('qual_player', 1);}
+      this.server.emit('qual_player', 1);
+    }
     else {
       this.logger.debug('Par');
-      this.server.emit('qual_player', 2);}
+      this.server.emit('qual_player', 2);
+    }
   }
 
 }
@@ -132,7 +134,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 //  Coloca conexao no vetor de conexoes (server)
 //  Eh impar ? envia impar (server)
 //    registra socket como impar (server)
-//    Exibe msg "aguardando player 2" (server)
+//    Exibe msg "aguardando player 2" (client)
 //  Cliente update seu estado (par / impar) (client)
 // 
 //  Eh par ? envia par
@@ -146,4 +148,5 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 //  clientes recebem estado
 //  clientes desenham mundo
 //  clientes enviam teclas
+//
 //

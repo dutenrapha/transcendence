@@ -27,7 +27,6 @@ interface GameComponentProps {
 const GameComponent: FC<GameComponentProps> = ({ gateway }) => {
   const socketRef: MutableRefObject<Socket> = useRef(null);
   const [positions, setPositions] = useState({})
-  const [Iam, setIam] = useState(0)
 
   useEffect(() => {
     // Socket domain defaults to the Next.JS proxy rewrite (next.config.js)
@@ -74,9 +73,14 @@ const GameComponent: FC<GameComponentProps> = ({ gateway }) => {
       const position = positions[id];
       p5.circle(position.x * p5.width, position.y * p5.height, 10);
     }
+    if (player_num == 1) {
+      p5.textSize(24);
+      p5.fill('red');
+      p5.text("Aguardando player 2 ...", p5.width / 3, p5.height / 3 );
+    }
   };
 
-  function keyPressed(p5: p5Types) {
+  const keyPressed = (p5: p5Types) => {
     socketRef.current.emit("Input_raquete", {
       key: p5.keyCode})
     console.log("Key: " + p5.keyCode)
