@@ -13,6 +13,8 @@ type IPositions = {
   [id: string]: IPosition,
 }
 
+let player_num = 0;
+
 // Will only import `react-p5` on client-side
 const Sketch: ComponentType<SketchProps> = dynamic(() => import('react-p5').then((mod) => mod.default), {
   ssr: false,
@@ -25,11 +27,14 @@ interface GameComponentProps {
 const GameComponent: FC<GameComponentProps> = ({ gateway }) => {
   const socketRef: MutableRefObject<Socket> = useRef(null);
   const [positions, setPositions] = useState({})
+  const [Iam, setIam] = useState(0)
 
   useEffect(() => {
     // Socket domain defaults to the Next.JS proxy rewrite (next.config.js)
     if (socketRef.current == null) {
       socketRef.current = io(gateway, { transports: ['websocket'] });
+      console.log("id: " + socketRef.current.id);
+      socketRef.current.emit("chegando");
     }
 
     socketRef.current.open();
@@ -38,7 +43,10 @@ const GameComponent: FC<GameComponentProps> = ({ gateway }) => {
       setPositions(data);
     });
 
-//    console
+    socketRef.current.on("qual_player", (n: number) => {
+      player_num = n;
+      console.log('Player num: ' + player_num);
+    });
 
     return () => {
       socketRef.current.disconnect();
@@ -58,7 +66,6 @@ const GameComponent: FC<GameComponentProps> = ({ gateway }) => {
 
     p5.fill(255);
     p5.frameRate(30);
-
   };
 
   const draw = (p5: p5Types) => {

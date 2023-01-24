@@ -16,6 +16,7 @@ build:
 	#docker volume create --name=frontend_volume
 	echo "Building ..."
 	docker-compose build
+	echo -en "\007"
 	#docker-compose up --build back postgres
 	#docker build -t node_img .
 	#docker-compose $(YML) $(ENV) build
@@ -44,13 +45,15 @@ up:
 	#docker-compose $(YML) $(ENV) ps -a
 front:
 	docker-compose build frontend
+	echo -en "\007"
 back:
 	docker-compose build backend
+	echo -en "\007"
 
 #ps:
 #	docker-compose $(YML) $(ENV) ps -a
 
-back:
+backin:
 	docker exec -u root -it backend bash
 
 log:

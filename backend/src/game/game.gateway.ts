@@ -23,6 +23,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private positions: Positions = {}
   private readonly frameRate = 30;
   private readonly logger: Logger = new Logger(GameGateway.name);
+  private SocketIdVector = [];
 
   @WebSocketServer()
   server: Server;
@@ -51,6 +52,19 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('Input_raquete')
   updateRaquete(client: Socket, payload: any): void {
     this.logger.debug(`coordinates received: key: ${payload.key}`)
+  }
+
+  @SubscribeMessage('chegando')
+  pushConection(client: Socket): void {
+    this.logger.debug(`Chegando: ${client.id}`)
+    this.SocketIdVector.push(client.id);
+    this.logger.debug(`Length: ${this.SocketIdVector.length}`)
+    if (this.SocketIdVector.length % 2 == 1) {
+      this.logger.debug('Impar');
+      this.server.emit('qual_player', 1);}
+    else {
+      this.logger.debug('Par');
+      this.server.emit('qual_player', 2);}
   }
 
 }
@@ -111,4 +125,25 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 //    vx
 //    vy
 //    score
+//
+//
+// !a conexao envia (client)
+// 1a conexao chega (server)
+//  Coloca conexao no vetor de conexoes (server)
+//  Eh impar ? envia impar (server)
+//    registra socket como impar (server)
+//    Exibe msg "aguardando player 2" (server)
+//  Cliente update seu estado (par / impar) (client)
+// 
+//  Eh par ? envia par
+//    registra socket como par
+//    Inicializa jogo desenhando raquetes e bola
+//  Cliente update seu estado (par / impar)
+//  Espera 3 seg (server)
+//  loop (heartbeat)
+//  update estado mundo (server)
+//  envia estado mundo (server)
+//  clientes recebem estado
+//  clientes desenham mundo
+//  clientes enviam teclas
 //
