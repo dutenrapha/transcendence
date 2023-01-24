@@ -50,7 +50,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('Input_raquete')
   updateRaquete(client: Socket, payload: any): void {
-    this.logger.debug(`coordinates received: x: ${payload.x} y: ${payload.y}`)
+    this.logger.debug(`coordinates received: key: ${payload.key}`)
   }
 
 }

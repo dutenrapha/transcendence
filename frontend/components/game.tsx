@@ -67,16 +67,15 @@ const GameComponent: FC<GameComponentProps> = ({ gateway }) => {
       const position = positions[id];
       p5.circle(position.x * p5.width, position.y * p5.height, 10);
     }
-    setInterval(function (p5: p5Types) {
-      socketRef.current.emit("Input_raquete", {
-        x: p5.mouseX,
-        y: p5.mouseY })
-    }
-    , 30)
   };
 
-
-  return <Sketch setup={setup} draw={draw} />;
+  function keyPressed(p5: p5Types) {
+    socketRef.current.emit("Input_raquete", {
+      key: p5.keyCode})
+    console.log("Key: " + p5.keyCode)
+  };
+    
+  return <Sketch setup={setup} draw={draw} keyPressed={keyPressed}/>;
 };
 
 export default GameComponent
