@@ -1,8 +1,8 @@
-import styles from "../../styles/Home.module.css";
+import styles from "../styles/Home.module.css";
 import Link from "next/link";
-import { NextPageWithLayout } from "../_app";
+import { NextPageWithLayout } from "./_app";
 import { ReactElement } from "react";
-import Layout from "../../components/layout";
+import Layout from "../components/layout";
 
 interface Props {
   message: string
@@ -27,7 +27,7 @@ Home.getLayout = function getLayout(page: ReactElement) {
 export async function getServerSideProps(context) {
   //const response = await fetch(`http://backend:8080/user`);
   //const body = await response.text(); //
-  const body = "New Game"
+  const body = "New Chat"
   return {
     props: {
       message: body
