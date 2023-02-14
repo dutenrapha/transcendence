@@ -6,8 +6,11 @@ export default function PageWithJSbasedForm() {
 
     // Get data from the form.
     const data = {
-      first: event.target.first.value,
-      last: event.target.last.value,
+      user: event.target.user.value,
+      pwd: event.target.pwd.value,
+      full_name: event.target.full_name.value,
+      email: event.target.email.value,
+      avatar: event.target.avatar.value,
     }
 
     // Send the data to the server in JSON format.
@@ -34,18 +37,29 @@ export default function PageWithJSbasedForm() {
     // Get the response data from server as JSON.
     // If server returns the name submitted, that means the form works.
     const result = await response.json()
-    alert(`Is this your full name: ${result.data}`)
+    alert(`Form Data: ${result.data}`)
   }
   return (
     // We pass the event to the handleSubmit() function on submit.
     <form onSubmit={handleSubmit}>
-      <label htmlFor="first">First Name</label>
-      <input type="text" id="first" name="first" required />
+      <label htmlFor="user">User intra 42</label>
+      <input type="text" id="user" name="user" required />
 
-      <label htmlFor="last">Last Name</label>
-      <input type="text" id="last" name="last" required />
+      <label htmlFor="pwd">Password</label>
+      <input type="text" id="pwd" name="pwd" required />
+
+      <label htmlFor="full_name">Full Name</label>
+      <input type="text" id="full_name" name="full_name" required />
+
+      <label htmlFor="email">Email</label>
+      <input type="text" id="email" name="email" required />
+
+      <label htmlFor="avatar">Avatar</label>
+      <input type="text" id="avatar" name="avatar" required />
 
       <button type="submit">Submit</button>
     </form>
   )
 }
+
+// user pwd full_name email avatar
