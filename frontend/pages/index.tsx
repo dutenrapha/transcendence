@@ -17,7 +17,7 @@ const Home: NextPageWithLayout = (props: Props) => {
       <Link className={styles.btn} href="signin">
         Sign In
       </Link>
-      <Link className={styles.btn} href="signup">
+      <Link className={styles.btn} href="signup_form">
         Sign up
       </Link>
     </div>
