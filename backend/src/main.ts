@@ -6,7 +6,7 @@ import 'dotenv/config';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {cors: true});
 
   // OpenApi setup
   const documentOptions = new DocumentBuilder()
@@ -20,8 +20,8 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   const config = app.get(ConfigService)
-  const port = config.getOrThrow("APP_PORT")
-
+  // const port = config.getOrThrow("APP_PORT")
+  const port = 8000
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
     forbidNonWhitelisted: true,
