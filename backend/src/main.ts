@@ -20,8 +20,8 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   const config = app.get(ConfigService)
-  const port = config.getOrThrow("APP_PORT")
-
+  // const port = config.getOrThrow("APP_PORT")
+  const port = 8000
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
     forbidNonWhitelisted: true,
