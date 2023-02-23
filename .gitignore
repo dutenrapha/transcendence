@@ -1,4 +1,6 @@
 /db/dbdata
+/frontend/node_modules/
+/backend/node_modules/
 
 # Created by https://www.toptal.com/developers/gitignore/api/vim
 # Edit at https://www.toptal.com/developers/gitignore?templates=vim

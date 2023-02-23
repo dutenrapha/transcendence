@@ -1,5 +1,4 @@
 import { Box, Button, Group, Modal, PasswordInput, TextInput, Avatar, Checkbox, FileInput } from "@mantine/core";
-import { IconUpload } from '@tabler/icons';
 import { useForm } from "@mantine/form";
 import Link from "next/link";
 import { FC, FormEvent, useState } from "react";
@@ -10,7 +9,8 @@ type CreateUserFormType = {
   full_name: string,
   email: string,
   password: string,
-  tfa: boolean
+  tfa: boolean,
+  file: string
 }
 
 const handleSubmit = async (values: CreateUserFormType, event: FormEvent<HTMLFormElement>) => {
@@ -39,8 +39,11 @@ const UserCreateForm = () => {
   const form = useForm<CreateUserFormType>({
     initialValues: {
       user: '',
+      full_name: '',
       email: '',
       password: '',
+      tfa: false,
+      file: ''
     },
 
     validate: {
@@ -52,16 +55,14 @@ const UserCreateForm = () => {
     <Box sx={{ maxWidth: 500 }} mx="auto">
       <form onSubmit={form.onSubmit(async (values, event) => handleSubmit(values, event))}>
         <Avatar
-          src="smile.png"
+          src="/images/smile.png"
           size="xl"
         />
         
         <FileInput
           label="Upload Image"
           placeholder="AvatarImage.png"
-          icon={
-            <IconUpload size={14}
-          />}
+          {...form.getInputProps('file')}
         />
 
         <TextInput
