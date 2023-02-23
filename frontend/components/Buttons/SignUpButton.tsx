@@ -1,4 +1,5 @@
-import { Box, Button, Group, Modal, PasswordInput, TextInput, Avatar, Checkbox } from "@mantine/core";
+import { Box, Button, Group, Modal, PasswordInput, TextInput, Avatar, Checkbox, FileInput } from "@mantine/core";
+import { IconUpload } from '@tabler/icons';
 import { useForm } from "@mantine/form";
 import Link from "next/link";
 import { FC, FormEvent, useState } from "react";
@@ -8,7 +9,8 @@ type CreateUserFormType = {
   user: string,
   full_name: string,
   email: string,
-  password: string
+  password: string,
+  tfa: boolean
 }
 
 const handleSubmit = async (values: CreateUserFormType, event: FormEvent<HTMLFormElement>) => {
@@ -29,6 +31,7 @@ const handleSubmit = async (values: CreateUserFormType, event: FormEvent<HTMLFor
 
   const result = await response.json()
   console.log(`Is this your full name: ${result.data}`)
+  console.log(values)
 }
 
 const UserCreateForm = () => {
@@ -51,6 +54,14 @@ const UserCreateForm = () => {
         <Avatar
           src="smile.png"
           size="xl"
+        />
+        
+        <FileInput
+          label="Upload Image"
+          placeholder="AvatarImage.png"
+          icon={
+            <IconUpload size={14}
+          />}
         />
 
         <TextInput
@@ -84,7 +95,7 @@ const UserCreateForm = () => {
 
         <Checkbox
           label="Enable 2FA ?"
-          checked={false}
+          {...form.getInputProps('tfa')}
         />
 
         <Group position="right" mt="md">
