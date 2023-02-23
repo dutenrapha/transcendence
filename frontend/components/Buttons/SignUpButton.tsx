@@ -3,6 +3,7 @@ import { useForm } from "@mantine/form";
 import Link from "next/link";
 import { FC, FormEvent, useState } from "react";
 import { GoogleButton } from "./SocialButtons";
+import { IconUpload } from '@tabler/icons-react';
 
 type CreateUserFormType = {
   user: string,
@@ -62,6 +63,7 @@ const UserCreateForm = () => {
         <FileInput
           label="Upload Image"
           placeholder="AvatarImage.png"
+          icon={<IconUpload size={14} />}
           {...form.getInputProps('file')}
         />
 
