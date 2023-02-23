@@ -1,4 +1,4 @@
-import { Box, Button, Group, Modal, PasswordInput, TextInput } from "@mantine/core";
+import { Box, Button, Group, Modal, PasswordInput, TextInput, Avatar, Checkbox } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import Link from "next/link";
 import { FC, FormEvent, useState } from "react";
@@ -6,6 +6,7 @@ import { GoogleButton } from "./SocialButtons";
 
 type CreateUserFormType = {
   user: string,
+  full_name: string,
   email: string,
   password: string
 }
@@ -47,11 +48,23 @@ const UserCreateForm = () => {
   return (
     <Box sx={{ maxWidth: 500 }} mx="auto">
       <form onSubmit={form.onSubmit(async (values, event) => handleSubmit(values, event))}>
+        <Avatar
+          src="smile.png"
+          size="xl"
+        />
+
         <TextInput
           withAsterisk
           label="User"
           placeholder="User"
           {...form.getInputProps('user')}
+        />
+
+        <TextInput
+          withAsterisk
+          label="FullName"
+          placeholder="John Doe"
+          {...form.getInputProps('full_name')}
         />
 
         <TextInput
@@ -67,6 +80,11 @@ const UserCreateForm = () => {
           placeholder="Your password"
           required
           {...form.getInputProps('password')}
+        />
+
+        <Checkbox
+          label="Enable 2FA ?"
+          checked={false}
         />
 
         <Group position="right" mt="md">
