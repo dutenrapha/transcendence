@@ -1,9 +1,8 @@
-import { Box, Button, Group, Modal, PasswordInput, TextInput, Avatar, Checkbox, FileInput } from "@mantine/core";
+import { Box, Button, Group, Modal, PasswordInput, TextInput, Avatar, Checkbox, FileInput, FileButton } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import Link from "next/link";
 import { FC, FormEvent, useState } from "react";
 import { GoogleButton } from "./SocialButtons";
-import { IconUpload } from '@tabler/icons-react';
 
 type CreateUserFormType = {
   user: string,
@@ -14,10 +13,14 @@ type CreateUserFormType = {
   file: string
 }
 
-const handleSubmit = async (values: CreateUserFormType, event: FormEvent<HTMLFormElement>) => {
+const handleSubmit = async (values: CreateUserFormType, event: FormEvent<HTMLFormElement>, arq: File) => {
   event.preventDefault()
 
-  const JSONdata = JSON.stringify(values)
+  var vv = {...values, file: arq}
+  console.log("vv:")
+  console.log(vv)
+
+  const JSONdata = JSON.stringify(vv)
   const endpoint = '/api/users'
 
   const options = {
@@ -32,7 +35,7 @@ const handleSubmit = async (values: CreateUserFormType, event: FormEvent<HTMLFor
 
   const result = await response.json()
   console.log(`Is this your full name: ${result.data}`)
-  console.log(values)
+  console.log(vv)
 }
 
 const UserCreateForm = () => {
@@ -52,9 +55,12 @@ const UserCreateForm = () => {
     },
   });
 
+  const [arq, setArq] = useState<File>();
+  console.log(arq)
+
   return (
     <Box sx={{ maxWidth: 500 }} mx="auto">
-      <form onSubmit={form.onSubmit(async (values, event) => handleSubmit(values, event))}>
+      <form onSubmit={form.onSubmit(async (values, event) => handleSubmit(values, event, arq))}>
 
         <Group position="center">
           <Avatar
@@ -62,14 +68,13 @@ const UserCreateForm = () => {
             size="xl"
           />
         </Group>
-        
-        <FileInput
-          label="Upload Image"
-          placeholder="AvatarImage.png"
-          icon={<IconUpload size={14} />}
-          {...form.getInputProps('file')}
-        />
 
+        <Group position="center">
+          <FileButton onChange={setArq} accept="image/png,image/jpeg" >
+            {(props) => <Button {...props}>Upload image</Button>}
+          </FileButton>
+        </Group>
+        
         <TextInput
           withAsterisk
           label="User"
