@@ -55,10 +55,13 @@ const UserCreateForm = () => {
   return (
     <Box sx={{ maxWidth: 500 }} mx="auto">
       <form onSubmit={form.onSubmit(async (values, event) => handleSubmit(values, event))}>
-        <Avatar
-          src="/images/smile.png"
-          size="xl"
-        />
+
+        <Group position="center">
+          <Avatar
+            src="/images/smile.png"
+            size="xl"
+          />
+        </Group>
         
         <FileInput
           label="Upload Image"
