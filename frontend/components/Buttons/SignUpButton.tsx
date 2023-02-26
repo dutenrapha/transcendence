@@ -1,4 +1,4 @@
-import { Box, Button, Group, Modal, PasswordInput, TextInput, Avatar, Checkbox, FileInput, FileButton } from "@mantine/core";
+import { Box, Button, Group, Modal, PasswordInput, TextInput, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import Link from "next/link";
 import { FC, FormEvent, useState } from "react";
@@ -6,11 +6,8 @@ import { GoogleButton } from "./SocialButtons";
 
 type CreateUserFormType = {
   user: string,
-  full_name: string,
   email: string,
   password: string,
-  tfa: boolean,
-  file: string
 }
 
 const handleSubmit = async (values: CreateUserFormType, event: FormEvent<HTMLFormElement>, arq: File) => {
@@ -62,31 +59,13 @@ const UserCreateForm = () => {
     <Box sx={{ maxWidth: 500 }} mx="auto">
       <form onSubmit={form.onSubmit(async (values, event) => handleSubmit(values, event, arq))}>
 
-        <Group position="center">
-          <Avatar
-            src="/images/smile.png"
-            size="xl"
-          />
-        </Group>
+        <Text fw={700} ta='center' >Sign Up Form</Text>
 
-        <Group position="center">
-          <FileButton onChange={setArq} accept="image/png,image/jpeg" >
-            {(props) => <Button {...props}>Upload image</Button>}
-          </FileButton>
-        </Group>
-        
         <TextInput
           withAsterisk
           label="User"
           placeholder="User"
           {...form.getInputProps('user')}
-        />
-
-        <TextInput
-          withAsterisk
-          label="FullName"
-          placeholder="John Doe"
-          {...form.getInputProps('full_name')}
         />
 
         <TextInput
@@ -102,11 +81,6 @@ const UserCreateForm = () => {
           placeholder="Your password"
           required
           {...form.getInputProps('password')}
-        />
-
-        <Checkbox
-          label="Enable 2FA ?"
-          {...form.getInputProps('tfa')}
         />
 
         <Group position="right" mt="md">
