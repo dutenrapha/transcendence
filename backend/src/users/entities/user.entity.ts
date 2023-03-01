@@ -21,5 +21,9 @@ export class User {
   enable2fa: boolean;
 
   @Column({ nullable: true })
-  refreshToken?: string
+  refreshToken?: string;
+
+  @Column({ type: 'bytea', nullable: true })
+  avatar: Uint8Array;
+
 }
