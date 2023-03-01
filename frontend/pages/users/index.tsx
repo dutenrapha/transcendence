@@ -6,6 +6,7 @@ import { NextPageWithLayout } from "../_app"
 
 export const getStaticProps: GetStaticProps = async (context) => {
     const res: Response = await fetch("https://jsonplaceholder.typicode.com/users")
+//    const res: Response = await fetch("http://localhost:8080")
     const data: Array<User> = await res.json()
 
     return {
@@ -20,7 +21,7 @@ const Users: NextPageWithLayout = ({ users }: { users: Array<User> }) => {
             <h1>All Users</h1>
             {users.map(user => (
                 <Link href={`users/${user.id}`} key={user.id} className={styles.single}>
-                    <h3>{user.name}</h3>
+                    <h3>{user.username}</h3>
                 </Link>
 
             ))}

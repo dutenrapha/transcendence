@@ -15,5 +15,11 @@ export class User {
   password?: string;
 
   @Column({ nullable: true })
+  fullname: string;
+
+  @Column({ nullable: true })
+  enable2fa: boolean;
+
+  @Column({ nullable: true })
   refreshToken?: string
 }

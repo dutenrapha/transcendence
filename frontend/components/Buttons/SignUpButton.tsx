@@ -5,7 +5,7 @@ import { FC, FormEvent, useState } from "react";
 import { GoogleButton } from "./SocialButtons";
 
 type CreateUserFormType = {
-  user: string,
+  username: string,
   email: string,
   password: string
 }
@@ -24,6 +24,10 @@ const handleSubmit = async (values: CreateUserFormType, event: FormEvent<HTMLFor
     body: JSONdata,
   }
 
+  console.log("fetch...")
+  console.log(endpoint)
+  console.log(options)
+
   const response = await fetch(endpoint, options)
 
   const result = await response.json()
@@ -34,7 +38,7 @@ const UserCreateForm = () => {
 
   const form = useForm<CreateUserFormType>({
     initialValues: {
-      user: '',
+      username: '',
       email: '',
       password: '',
     },
@@ -51,7 +55,7 @@ const UserCreateForm = () => {
           withAsterisk
           label="User"
           placeholder="User"
-          {...form.getInputProps('user')}
+          {...form.getInputProps('username')}
         />
 
         <TextInput
@@ -87,6 +91,8 @@ export const SignUpButton: FC = () => {
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
+        overlayOpacity={0.55}
+        overlayBlur={3}
       >
         <UserCreateForm />
       </Modal>
