@@ -4,6 +4,5 @@ import { CreateUserDto } from "./create-user.dto";
 
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
-  @IsString()
-  readonly refreshToken?: string;
+  readonly refreshToken: string;
 }

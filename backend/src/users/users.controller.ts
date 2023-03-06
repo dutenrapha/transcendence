@@ -23,13 +23,13 @@ export class UsersController {
   /** 
    * List all users 
   */
-  @UseGuards(AccessTokenGuard)
+//  @UseGuards(AccessTokenGuard)
   @Get()
   findAll() {
     return this.usersService.findAll();
   }
 
-  @UseGuards(AccessTokenGuard)
+//  @UseGuards(AccessTokenGuard)
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.usersService.findOne(id);
