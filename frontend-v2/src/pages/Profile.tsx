@@ -6,25 +6,7 @@ import { useForm } from "@mantine/form";
 import { FormEvent, useState } from "react";
 import useFetch from "../components/useFetch";
 import { User } from "../users"
-
-// const Profile: FC = () => {
-//  return (
-//    <div>
-//      <h1>Profile</h1>
-//      <p>Dolor aliquip id laboris id sunt ut mollit nulla sunt tempor anim.</p>
-//      <p>
-//        Commodo commodo officia adipisicing Lorem culpa amet magna proident ad ad. Officia mollit
-//        amet irure quis dolore anim non eu excepteur culpa commodo amet eu. Eiusmod tempor ad
-//        cupidatat cupidatat occaecat velit et consequat qui ipsum occaecat labore esse. Mollit ad
-//        amet aliquip proident qui eu proident voluptate fugiat non ad ipsum excepteur.
-//      </p>
-//      <Link to='/'>Go to Home</Link>
-//    </div>
-//  );
-// };
-//
-// export default Profile;
-//
+import { useEffect } from 'react';
 
 type CreateUserFormType = {
   username: string,
@@ -36,10 +18,6 @@ type CreateUserFormType = {
   picture: string
 }
 
-// Get Data
-// Get id (hardcoded for now)
-// Show form with data
-// Make Patch
 // Incluir botao image upload
 // Fazer figura mostrar avatar
 
@@ -73,15 +51,9 @@ const UserCreateForm = () => {
 
   const id: Number = 1;
 
-//  const { error, isPending, data: userData } = useFetch('http://localhost:8080/users/' + id)
-  const dbData: any  = useFetch('http://localhost:8080/users/' + id)
-    console.log("UserData:")
-    console.log(dbData.data)
-    console.log(dbData.data?.username)
-
   const form = useForm<CreateUserFormType>({
     initialValues: {
-      username: dbData.data?.username,
+      username: '',
       firstName: '',
       lastName: '',
       email: '',
@@ -94,6 +66,36 @@ const UserCreateForm = () => {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
     },
   });
+
+//  const { error, isPending, data: userData } = useFetch('http://localhost:8080/users/' + id)
+   const dbData: any  = useFetch('http://localhost:8080/users/' + id)
+    console.log("UserData:")
+    console.log(dbData.data)
+    console.log(dbData.data?.username)
+
+   var values: CreateUserFormType = {
+      username: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      mfa_enabled: false,
+      picture: ''
+   }
+    
+    values.username = dbData.data?.username;
+    values.firstName = dbData.data?.firstName;
+    values.lastName  = dbData.data?.lastName;
+    values.email = dbData.data?.email;
+    values.password = dbData.data?.password;
+    values.mfa_enabled = dbData.data?.mfa_enabled;
+    values.picture = dbData.data?.picture;
+      console.log("values: ", values)
+
+    useEffect(() => {
+      form.setValues(values);
+      form.resetDirty(values);
+    },[]);
 
   const [arq, setArq] = useState(null);
   console.log(arq)
@@ -111,29 +113,25 @@ const UserCreateForm = () => {
 
         <TextInput
           label="Username"
-//          placeholder="User"
-            placeholder = {dbData.data?.username}
+          placeholder="User"
           {...form.getInputProps('username')}
         />
 
         <TextInput
           label="FirstName"
-//          placeholder="John Doe"
-         placeholder = {dbData.data?.firstName}
+          placeholder="John Doe"
           {...form.getInputProps('firstName')}
         />
 
         <TextInput
           label="LastName"
-//          placeholder="John Doe"
-         placeholder = {dbData.data?.lastName}
+          placeholder="John Doe"
           {...form.getInputProps('lastName')}
         />
 
         <TextInput
           label="Email"
-//          placeholder="your@email.com"
-          placeholder = {dbData.data?.email}
+          placeholder="your@email.com"
           {...form.getInputProps('email')}
         />
 
