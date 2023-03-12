@@ -24,7 +24,7 @@ export class User {
   mfa_enabled?: boolean;
 
   @Column({ type: 'bytea', nullable: true })
-  picture?: Uint8Array;
+  picture?: string;
 
   @Column({ nullable: true })
   refreshToken?: string

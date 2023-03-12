@@ -43,6 +43,8 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException(`User ID $(id) not found`)
     }
+    console.log("user backend:")
+    console.log(user)
 
     return this.usersRepository.save(user);
   }

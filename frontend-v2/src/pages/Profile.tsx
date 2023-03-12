@@ -27,13 +27,13 @@ import { User } from "../users"
 //
 
 type CreateUserFormType = {
-  user: string,
+  username: string,
   firstName: string,
   lastName: string,
   email: string,
   password: string,
-  enable2fa: boolean,
-  file: string
+  mfa_enabled: boolean,
+  picture: string
 }
 
 // Get Data
@@ -47,12 +47,12 @@ const handleSubmit = async (values: CreateUserFormType, event: FormEvent<HTMLFor
   event.preventDefault()
 
 //  var vv = {...values, file: arq}
-  var vv = {...values, file: 'none'}
+  var vv = {...values, picture: 'none'}
   console.log("vv:")
   console.log(vv)
 
   const JSONdata = JSON.stringify(vv)
-  const endpoint = 'http://localhost:8080/users'
+  const endpoint = 'http://localhost:8080/users/1'
 
   const options = {
     method: 'PATCH',
@@ -65,33 +65,29 @@ const handleSubmit = async (values: CreateUserFormType, event: FormEvent<HTMLFor
   const response = await fetch(endpoint, options)
 
   const result = await response.json()
-  console.log(`Is this your full name: ${result.data}`)
+  console.log("Patching ... :")
   console.log(vv)
 }
 
 const UserCreateForm = () => {
 
   const id: Number = 1;
-  var x: User;
 
-  const { error, isPending, data: userData } = useFetch('http://localhost:8080/users/' + id)
+//  const { error, isPending, data: userData } = useFetch('http://localhost:8080/users/' + id)
+  const dbData: any  = useFetch('http://localhost:8080/users/' + id)
     console.log("UserData:")
-    console.log(userData)
-    console.log(isPending)
-    const a = { userData };
-    { if (!isPending)
-      console.log (userData)
-    }
+    console.log(dbData.data)
+    console.log(dbData.data?.username)
 
   const form = useForm<CreateUserFormType>({
     initialValues: {
-      user: '',
+      username: dbData.data?.username,
       firstName: '',
       lastName: '',
       email: '',
       password: '',
-      enable2fa: false,
-      file: ''
+      mfa_enabled: false,
+      picture: ''
     },
 
     validate: {
@@ -114,26 +110,30 @@ const UserCreateForm = () => {
         </Group>
 
         <TextInput
-          label="User"
-          placeholder="User"
-          {...form.getInputProps('user')}
+          label="Username"
+//          placeholder="User"
+            placeholder = {dbData.data?.username}
+          {...form.getInputProps('username')}
         />
 
         <TextInput
           label="FirstName"
-          placeholder="John Doe"
+//          placeholder="John Doe"
+         placeholder = {dbData.data?.firstName}
           {...form.getInputProps('firstName')}
         />
 
         <TextInput
           label="LastName"
-          placeholder="John Doe"
+//          placeholder="John Doe"
+         placeholder = {dbData.data?.lastName}
           {...form.getInputProps('lastName')}
         />
 
         <TextInput
           label="Email"
-          placeholder="your@email.com"
+//          placeholder="your@email.com"
+          placeholder = {dbData.data?.email}
           {...form.getInputProps('email')}
         />
 
@@ -146,7 +146,7 @@ const UserCreateForm = () => {
 
         <Checkbox
           label="Enable 2FA ?"
-          {...form.getInputProps('enable2fa')}
+          {...form.getInputProps('mfa_enabled')}
         />
 
         <Group position="center" mt="md">
