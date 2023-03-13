@@ -7,6 +7,7 @@ import { FormEvent, useState } from "react";
 import useFetch from "../components/useFetch";
 import { User } from "../users"
 import { useEffect } from 'react';
+import axios from 'axios';
 
 type CreateUserFormType = {
   username: string,
@@ -15,17 +16,15 @@ type CreateUserFormType = {
   email: string,
   password: string,
   mfa_enabled: boolean,
-  picture: string
+  picture: File | null
 }
-
-// Incluir botao image upload
-// Fazer figura mostrar avatar
 
 const handleSubmit = async (values: CreateUserFormType, event: FormEvent<HTMLFormElement>) => {
   event.preventDefault()
 
 //  var vv = {...values, file: arq}
-  var vv = {...values, picture: 'none'}
+//  var vv = {...values, picture: 'none'}
+  var vv = {...values}
   console.log("vv:")
   console.log(vv)
 
@@ -51,27 +50,25 @@ const UserCreateForm = () => {
 
   const id: Number = 1;
 
-  const form = useForm<CreateUserFormType>({
-    initialValues: {
-      username: '',
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      mfa_enabled: false,
-      picture: ''
-    },
-
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-    },
-  });
-
-//  const { error, isPending, data: userData } = useFetch('http://localhost:8080/users/' + id)
-   const dbData: any  = useFetch('http://localhost:8080/users/' + id)
+  const dbData: any  = useFetch('http://localhost:8080/users/' + id)
     console.log("UserData:")
-    console.log(dbData.data)
-    console.log(dbData.data?.username)
+    console.log(dbData?.data)
+
+    const form = useForm<CreateUserFormType>({
+      initialValues: {
+        username: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        mfa_enabled: false,
+        picture: null
+      },
+
+      validate: {
+        email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+      },
+    });
 
    var values: CreateUserFormType = {
       username: '',
@@ -80,80 +77,90 @@ const UserCreateForm = () => {
       email: '',
       password: '',
       mfa_enabled: false,
-      picture: ''
+      picture: null
    }
     
-    values.username = dbData.data?.username;
-    values.firstName = dbData.data?.firstName;
-    values.lastName  = dbData.data?.lastName;
-    values.email = dbData.data?.email;
-    values.password = dbData.data?.password;
-    values.mfa_enabled = dbData.data?.mfa_enabled;
-    values.picture = dbData.data?.picture;
-      console.log("values: ", values)
 
-    useEffect(() => {
-      form.setValues(values);
-      form.resetDirty(values);
-    },[]);
+//    useEffect(() => {
+//          values.username = dbData.data?.username;
+//          values.firstName = dbData.data?.firstName;
+//          values.lastName  = dbData.data?.lastName;
+//          values.email = dbData.data?.email;
+//          values.password = dbData.data?.password;
+//          values.mfa_enabled = dbData.data?.mfa_enabled;
+//          values.picture = dbData.data?.picture;
+//            console.log("values: ", values)
+//          form.setValues(values);
+//          form.resetDirty(values);
+//    }, []);
 
-  const [arq, setArq] = useState(null);
-  console.log(arq)
+  const [arq, setArq] = useState<File | null>(null);
+
+//  return (
+//    <Box sx={{ maxWidth: 500 }} mx="auto">
+//      <form onSubmit={form.onSubmit(async (values, event) => handleSubmit(values, event))}>
+//
+//        <Group position="center">
+//          <Avatar
+//            // Pega arquivo da pasta public/
+//            src="smile.png"
+//            size="xl"
+//          />
+//        </Group>
+//        <Group position="center">
+//          <FileButton onChange={setArq} accept="image/png,image/jpeg">
+//            {(props) => <Button {...props}>Upload image</Button>}
+//          </FileButton>
+//        </Group>
+//
+//        <TextInput
+//          label="Username"
+//          {...form.getInputProps('username')}
+//        />
+//
+//        <TextInput
+//          label="FirstName"
+//          {...form.getInputProps('firstName')}
+//        />
+//
+//        <TextInput
+//          label="LastName"
+//          {...form.getInputProps('lastName')}
+//        />
+//
+//        <TextInput
+//          label="Email"
+//          placeholder="your@email.com"
+//          {...form.getInputProps('email')}
+//        />
+//
+//        <PasswordInput
+//          label="Password"
+//          placeholder="Your password"
+//          required
+//          {...form.getInputProps('password')}
+//        />
+//
+//        <Checkbox
+//          label="Enable 2FA ?"
+//          {...form.getInputProps('mfa_enabled')}
+//        />
+//
+//        <Group position="center" mt="md">
+//          <Button type="submit">Save Changes</Button>
+//        </Group>
+//
+//      </form>
+//    </Box>
+//  );
 
   return (
     <Box sx={{ maxWidth: 500 }} mx="auto">
-      <form onSubmit={form.onSubmit(async (values, event) => handleSubmit(values, event))}>
-
-        <Group position="center">
-          <Avatar
-            src="/images/smile.png"
-            size="xl"
-          />
-        </Group>
-
-        <TextInput
-          label="Username"
-          placeholder="User"
-          {...form.getInputProps('username')}
-        />
-
-        <TextInput
-          label="FirstName"
-          placeholder="John Doe"
-          {...form.getInputProps('firstName')}
-        />
-
-        <TextInput
-          label="LastName"
-          placeholder="John Doe"
-          {...form.getInputProps('lastName')}
-        />
-
-        <TextInput
-          label="Email"
-          placeholder="your@email.com"
-          {...form.getInputProps('email')}
-        />
-
-        <PasswordInput
-          label="Password"
-          placeholder="Your password"
-          required
-          {...form.getInputProps('password')}
-        />
-
-        <Checkbox
-          label="Enable 2FA ?"
-          {...form.getInputProps('mfa_enabled')}
-        />
-
-        <Group position="center" mt="md">
-          <Button type="submit">Save Changes</Button>
-        </Group>
-
-      </form>
+      {dbData?.data && dbData.data.username}
+      ... Texto Fixo ...
+      {dbData?.data && dbData.data.username}
     </Box>
-  );
+  )
 }
 
 const Profile: FC = () => {
