@@ -18,7 +18,7 @@ type CreateUserFormType = {
   picture: File | null
 }
 
-const UserCreateForm = (x: any) => {
+const UserCreateForm = (props:any ) => {
 
     const form = useForm<CreateUserFormType>({
       initialValues: {
@@ -39,6 +39,7 @@ const UserCreateForm = (x: any) => {
   return (
     <Box sx={{ maxWidth: 500 }} mx="auto">
       ... Texto Fixo ...
+      {props.name}
     </Box>
   )
 
@@ -68,9 +69,9 @@ const Profile2: FC = () => {
   return (
     <>
       {!userData && <h1> Loading ... </h1>}
-      {userData && userData?.username }
+      {userData && userData.username }
       {userData &&
-        <UserCreateForm  />}
+        <UserCreateForm  name={userData.email} />}
     </>
   );
 }
