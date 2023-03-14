@@ -18,17 +18,37 @@ type CreateUserFormType = {
   picture: File | null
 }
 
+const handleSubmit = async (values: CreateUserFormType, event: FormEvent<HTMLFormElement>, endpoint_write : string) => {
+  event.preventDefault()
+
+  const JSONdata = JSON.stringify(values)
+  const endpoint = 'http://localhost:8080/users/1'
+
+  const options = {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSONdata,
+  }
+
+  const response = await fetch(endpoint, options)
+
+  const result = await axios.patch(endpoint, options)
+  console.log(`Is this your full name: ${result.data}`)
+}
+
 const UserCreateForm = (props:any ) => {
 
     const form = useForm<CreateUserFormType>({
       initialValues: {
-        username: '',
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        mfa_enabled: false,
-        picture: null
+        username: props.values.username,
+        firstName: props.values.firstName,
+        lastName: props.values.lastName,
+        email: props.values.email,
+        password: props.values.password,
+        mfa_enabled: props.values.mfa_enabled,
+        picture: props.values.picture
       },
 
       validate: {
@@ -36,10 +56,57 @@ const UserCreateForm = (props:any ) => {
       },
     });
 
+    console.log("form" , form.values)
+
   return (
     <Box sx={{ maxWidth: 500 }} mx="auto">
-      ... Texto Fixo ...
-      {props.name}
+      <form onSubmit={form.onSubmit(async (values, event) => handleSubmit(values, event, props.ep))}>
+
+        <Group position="center">
+          <Avatar
+            // Pega arquivo da pasta public/
+            src="smile.png"
+            size="xl"
+          />
+        </Group>
+        <TextInput
+          label="Username"
+          {...form.getInputProps('username')}
+        />
+
+        <TextInput
+          label="FirstName"
+          {...form.getInputProps('firstName')}
+        />
+
+        <TextInput
+          label="LastName"
+          {...form.getInputProps('lastName')}
+        />
+
+        <TextInput
+          label="Email"
+          placeholder="your@email.com"
+          {...form.getInputProps('email')}
+        />
+
+        <PasswordInput
+          label="Password"
+          placeholder="Your password"
+          required
+          {...form.getInputProps('password')}
+        />
+
+        <Checkbox
+          label="Enable 2FA ?"
+          {...form.getInputProps('mfa_enabled')}
+        />
+
+        <Group position="center" mt="md">
+          <Button type="submit">Save Changes</Button>
+        </Group>
+
+      </form>
     </Box>
   )
 
@@ -48,33 +115,37 @@ const UserCreateForm = (props:any ) => {
 const Profile2: FC = () => {
 
   const id: string = "1";
+  const endpoint_read : string = "http://localhost:8080/users/" + id;
+  const endpoint_write : string = "http://localhost:8080/users/" + id;
+
   var [userData, setuserData] = useState<any>(null);
 
   useEffect(() => {
     async function fetchData(id: string) {
-      console.log("id: ", id);
       try {
-          const response = await axios.get("http://localhost:8080/users/" + id)
-          console.log("res: ", response.data)
+          const response = await axios.get(endpoint_read)
           setuserData(response.data)
-          console.log("User Data1: ", userData)
       } catch (error) {
         console.error(error);
       }
     }
     fetchData(id);
-      console.log("User Data2: ", userData)
+      console.log("User Data: ", userData)
   },[])
 
   return (
     <>
-      {!userData && <h1> Loading ... </h1>}
-      {userData && userData.username }
+      {!userData &&
+        <h1> Loading ... </h1>
+      }
       {userData &&
-        <UserCreateForm  name={userData.email} />}
+        <UserCreateForm values={userData} ep={endpoint_write}/>}
     </>
   );
 }
 
 
 export default Profile2;
+// Tirar prints aleatorios
+// Colocar fetch dentro do componente
+//
