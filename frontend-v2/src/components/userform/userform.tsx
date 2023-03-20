@@ -7,6 +7,7 @@ import { FormEvent, useState, useEffect } from "react";
 import axios from 'axios';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { IUser } from '../../context/AuthContext';
+import api from '../../services/api';
 
 type CreateUserFormType = {
   username: string,
@@ -23,7 +24,8 @@ const handleSubmit = async (values: CreateUserFormType, event: FormEvent<HTMLFor
 
 
   const JSONdata = JSON.stringify(values)
-  const endpoint = 'http://localhost:8080/users/1'
+//  const endpoint = 'http://localhost:8080/users/1'
+  const endpoint = endpoint_write
 
   const options = {
     method: 'PATCH',
@@ -33,7 +35,7 @@ const handleSubmit = async (values: CreateUserFormType, event: FormEvent<HTMLFor
     body: JSONdata,
   }
 
-  const result = await axios.patch(endpoint, options)
+  const result = await api.patch(endpoint, options)
   console.log(`Is this your full name: ${result.data}`)
 }
 
@@ -126,7 +128,7 @@ const UserForm: FC = () => {
   useEffect(() => {
     async function fetchData(id: string) {
       try {
-          const response = await axios.get(endpoint_read)
+          const response = await api.get(endpoint_read)
           setuserData(response.data)
       } catch (error) {
         console.error(error);
