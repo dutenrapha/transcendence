@@ -27,19 +27,10 @@ const handleSubmit = async (values: CreateUserFormType, event: FormEvent<HTMLFor
 //  const endpoint = 'http://localhost:8080/users/1'
   const endpoint = endpoint_write
 
-  const options = {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSONdata,
-  }
-
   const result = await api.patch(endpoint,values)
 }
 
 const UserCreateForm = (props:any ) => {
-
 
     const user = props.values;
 
@@ -117,43 +108,46 @@ const UserCreateForm = (props:any ) => {
 
 const UserForm: FC = () => {
 
-  const id: string = "1";
-  const endpoint_read : string = "http://localhost:8080/users/" + id;
-  const endpoint_write : string = "http://localhost:8080/users/" + id;
 
   var [userData, setuserData] = useState<any>(null);
 
-  useEffect(() => {
-    async function fetchData(id: string) {
-      try {
-          const response = await api.get(endpoint_read)
-          setuserData(response.data)
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    fetchData(id);
-      console.log("User Data: ", userData)
-  },[])
+//  useEffect(() => {
+//    async function fetchData(id: string) {
+//      try {
+//          const response = await api.get(endpoint_read)
+//          setuserData(response.data)
+//      } catch (error) {
+//        console.error(error);
+//      }
+//    }
+//    fetchData(id);
+//      console.log("User Data: ", userData)
+//  },[])
 
 //  useEffect(() => {
 //    async function fetchData() {
-//      const   { x } :any  = await useAuthContext();
-//      setuserData(x);
-//      console.log("x: ", x)
+//      const   { user } :any  = await useAuthContext();
+//      setuserData(user);
 //    }
 //    fetchData();
 //    console.log("User Data: ", userData)
 //  },[]);
-//
+
+      const   { user } :any  = useAuthContext();
+//      setuserData(user);
+      console.log("User: ", user)
+      const id: string = user.id;
+  const endpoint_read : string = "http://localhost:8080/users/" + id;
+  const endpoint_write : string = "http://localhost:8080/users/" + id;
+
   return (
     <>
-      {!userData &&
+      {!user &&
         <h1> Loading ...
-        {userData?.id} :: {userData?.username} :: {userData?.firstName} </h1>
+        {user?.id} :: {user?.username} :: {user?.firstName} </h1>
       }
-      {userData &&
-        <UserCreateForm values={userData} ep={endpoint_write}/>}
+      {user &&
+        <UserCreateForm values={user} ep={endpoint_write}/>}
     </>
   );
 }
