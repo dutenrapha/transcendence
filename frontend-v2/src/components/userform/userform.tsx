@@ -5,9 +5,9 @@ import { Box, Button, Group, Modal, PasswordInput, TextInput, Avatar, Checkbox, 
 import { useForm } from "@mantine/form";
 import { FormEvent, useState, useEffect } from "react";
 import axios from 'axios';
+import api from '../../services/api';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { IUser } from '../../context/AuthContext';
-import api from '../../services/api';
 
 type CreateUserFormType = {
   username: string,
@@ -16,7 +16,7 @@ type CreateUserFormType = {
   email: string,
   password: string,
   mfa_enabled: boolean,
-  picture: File | null
+  picture: string
 }
 
 const handleSubmit = async (values: CreateUserFormType, event: FormEvent<HTMLFormElement>, endpoint_write : string) => {
@@ -35,13 +35,11 @@ const handleSubmit = async (values: CreateUserFormType, event: FormEvent<HTMLFor
     body: JSONdata,
   }
 
-  const result = await api.patch(endpoint, options)
-  console.log(`Is this your full name: ${result.data}`)
+  const result = await api.patch(endpoint,values)
 }
 
 const UserCreateForm = (props:any ) => {
 
-//    const  { user } : IUser = useAuthContext();
 
     const user = props.values;
 
@@ -138,15 +136,27 @@ const UserForm: FC = () => {
       console.log("User Data: ", userData)
   },[])
 
+//  useEffect(() => {
+//    async function fetchData() {
+//      const   { x } :any  = await useAuthContext();
+//      setuserData(x);
+//      console.log("x: ", x)
+//    }
+//    fetchData();
+//    console.log("User Data: ", userData)
+//  },[]);
+//
   return (
     <>
       {!userData &&
-        <h1> Loading ... </h1>
+        <h1> Loading ...
+        {userData?.id} :: {userData?.username} :: {userData?.firstName} </h1>
       }
       {userData &&
         <UserCreateForm values={userData} ep={endpoint_write}/>}
     </>
   );
 }
+
 
 export default UserForm;

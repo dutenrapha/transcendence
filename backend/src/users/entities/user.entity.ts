@@ -31,7 +31,7 @@ export class User {
 
   @Transform(({ obj }) => `${process.env.BACKEND_URL}/users/${obj.id}/avatar`)
   @Column({ type: 'bytea', nullable: true })
-  picture?: Uint8Array;
+  picture?: string;
 
   @Exclude()
   @Column({ nullable: true })

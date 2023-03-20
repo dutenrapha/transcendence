@@ -12,4 +12,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsNotEmpty()
   @IsOptional()
   readonly mfaEnabled?: boolean;
+
+  @IsOptional()
+  readonly picture?: string;
 }
