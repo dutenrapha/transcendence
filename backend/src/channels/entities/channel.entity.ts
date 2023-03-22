@@ -1,5 +1,11 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+export enum ChannelType {
+  PUB = 'public',
+  PVT = 'private',
+  PWD = 'password'
+}
+
 @Entity('channels')
 export class Channel {
   @PrimaryGeneratedColumn()
@@ -8,7 +14,11 @@ export class Channel {
   @Column()
   channelName: string;
 
-  @Column({default: 0} )
+ @Column({
+    type: 'enum',
+    enum: ChannelType,
+    default: ChannelType.PUB
+  })
   channelType: number;
 
   @Column({ nullable: true })

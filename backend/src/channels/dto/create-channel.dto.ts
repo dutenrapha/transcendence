@@ -1,11 +1,14 @@
-import { IsOptional, IsString, IsInt, IsArray } from 'class-validator';
+import { IsOptional, IsString, IsInt, IsArray, IsEnum } from 'class-validator';
+
+import { ChannelType } from '../entities/channel.entity'
 
 export class CreateChannelDto {
   @IsString()
   readonly channelName: string;
 
-  @IsInt()
+  @IsEnum(ChannelType)
   readonly channelType: number;
+
 
   @IsString()
   @IsOptional()
