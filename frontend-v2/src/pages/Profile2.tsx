@@ -6,13 +6,14 @@ import { useForm } from "@mantine/form";
 import { FormEvent, useState, useEffect } from "react";
 import axios from 'axios';
 import UserForm from '../components/userform/userform'
+import CreateNewChat from '../components/forms/createNewChat'
 
 const Profile2: FC = () => {
 
   return (
     <>
       <h1>Profile Form:</h1>
-      <UserForm />
+      <CreateNewChat />
     </>
   );
 }
