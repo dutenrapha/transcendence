@@ -6,8 +6,9 @@ import { Box, Button, Group, Modal, PasswordInput, TextInput, Avatar, Checkbox, 
 import { FormEvent, useState, useEffect } from "react";
 import axios from 'axios';
 import { useAuthContext } from '../../hooks/useAuthContext';
+import { useDisclosure } from '@mantine/hooks';
 
-type CreateNewChatType = {
+type EditChatType = {
   channelName: string,
   channelOwner: string,
   password: string,
@@ -16,7 +17,7 @@ type CreateNewChatType = {
 
 type string_or_null =  string | null
 
-const handleSubmit = async (values: CreateNewChatType, ctype:string_or_null, event: FormEvent<HTMLFormElement>, endpoint_write : string) => {
+const handleSubmit = async (values: EditChatType, ctype:string_or_null, event: FormEvent<HTMLFormElement>, endpoint_write : string) => {
   event.preventDefault()
 
   const JSONdata = JSON.stringify(values)
@@ -33,7 +34,7 @@ const UserCreateForm = (props:any ) => {
 
     const channel = props.values;
 
-    const form = useForm<CreateNewChatType>({
+    const form = useForm<EditChatType>({
       initialValues: {
         channelName: channel.channelName,
         channelOwner: channel.channelOwner, 
@@ -87,7 +88,7 @@ const UserCreateForm = (props:any ) => {
 
 }
 
-const CreateNewChat: FC = () => {
+const EditChatForm: FC = () => {
 
   const id = "1";
   const endpoint_read : string = "http://localhost:8080/channels/1";
@@ -119,4 +120,20 @@ const CreateNewChat: FC = () => {
   );
 }
 
-export default CreateNewChat;
+function EditChannelButton() {
+  const [opened, { open, close }] = useDisclosure(false);
+
+  return (
+    <>
+      <Modal opened={opened} onClose={close} title="Edit Channel Information">
+        <EditChatForm />
+      </Modal>
+
+      <Group position="center">
+        <Button onClick={open}>Edit Channel</Button>
+      </Group>
+    </>
+  );
+}
+
+export default EditChannelButton;
