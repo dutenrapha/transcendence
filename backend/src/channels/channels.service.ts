@@ -32,10 +32,15 @@ export class ChannelsService {
   async update(id: number, updateChannelDto: UpdateChannelDto): Promise<Channel> {
     const channel = await this.channelsRepository.preload({ id: +id, ...updateChannelDto});
     return this.channelsRepository.save(channel);
-//    return `This action updates a #${id} channel`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} channel`;
+  async remove(id: number) {
+    const channel = await this.channelsRepository.findOne({ where: { id: +id } });
+    if (!channel) {
+      throw new NotFoundException(`Channel ID $(id) not found`);
+    }
+
+    return this.channelsRepository.remove(channel);
+//    return `This action removes a #${id} channel`;
   }
 }

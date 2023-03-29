@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from "@mantine/form";
 import { Box, Button, Group, Modal, PasswordInput, TextInput, Avatar, Checkbox, FileInput, FileButton, Select } from '@mantine/core';
-import { FormEvent, useState, useEffect } from "react";
+import { FormEvent, useState, useEffect, MouseEventHandler } from "react";
 import axios from 'axios';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { useDisclosure } from '@mantine/hooks';
@@ -27,6 +27,11 @@ const handleSubmit = async (values: EditChatType, ctype:string_or_null, event: F
   console.log('vv: ', vv)
 
   const result = await axios.patch(endpoint, vv)
+}
+
+const deleteChannel: MouseEventHandler<HTMLButtonElement> = () => {
+  const endpoint_del : string = "http://localhost:8080/channels/3" ;
+  const result = axios.delete(endpoint_del);
 }
 
 const UserCreateForm = (props:any ) => {
@@ -80,6 +85,7 @@ const UserCreateForm = (props:any ) => {
 
         <Group position="center" mt="md">
           <Button type="submit">Save Changes</Button>
+          <Button onClick={deleteChannel}> DELETE </Button>
         </Group>
 
       </form>
@@ -90,9 +96,9 @@ const UserCreateForm = (props:any ) => {
 
 const EditChatForm: FC = () => {
 
-  const id = "1";
-  const endpoint_read : string = "http://localhost:8080/channels/1";
-  const endpoint_write : string = "http://localhost:8080/channels/1";
+  const id = "3";
+  const endpoint_read : string = "http://localhost:8080/channels/" + id;
+  const endpoint_write : string = "http://localhost:8080/channels/" + id;
 
   var [channelData, setchannelData] = useState<any>(null);
 
