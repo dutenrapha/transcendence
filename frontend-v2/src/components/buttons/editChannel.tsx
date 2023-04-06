@@ -1,74 +1,75 @@
-/* eslint-disable */
-import { FC } from 'react';
-import { Link } from 'react-router-dom';
-import { useForm } from "@mantine/form";
-import { Box, Button, Group, Modal, PasswordInput, TextInput, Avatar, Checkbox, FileInput, FileButton, Select } from '@mantine/core';
-import { FormEvent, useState, useEffect, MouseEventHandler } from "react";
+import { FC, FormEvent, useState, useEffect } from 'react';
+import { useForm } from '@mantine/form';
+import { Box, Button, Group, Modal, PasswordInput, TextInput, Select } from '@mantine/core';
 import axios from 'axios';
-import { useAuthContext } from '../../hooks/useAuthContext';
 import { useDisclosure } from '@mantine/hooks';
 
 type EditChatType = {
-  channelName: string,
-  channelOwner: string,
-  password: string,
-  channelAdmins: string[]
-}
+  channelName: string;
+  channelOwner: string;
+  password: string;
+  channelAdmins: string[];
+};
 
-type string_or_null =  string | null
+type string_or_null = 'string' | null;
 
-const handleSubmit = async (values: EditChatType, ctype:string_or_null, event: FormEvent<HTMLFormElement>, endpoint_write : string) => {
-  event.preventDefault()
+const handleSubmit = async (
+  values: EditChatType,
+  ctype: string_or_null,
+  event: FormEvent<HTMLFormElement>,
+  EndpointWrite: string,
+) => {
+  event.preventDefault();
 
-  const JSONdata = JSON.stringify(values)
-  const endpoint = endpoint_write 
+  //  const JSONdata = JSON.stringify(values);
+  const endpoint = EndpointWrite;
 
-  const vv = {...values, 'channelType' : ctype}
-  console.log('vv: ', vv)
+  const vv = { ...values, channelType: ctype };
+  console.log('vv: ', vv);
 
-  const result = await axios.patch(endpoint, vv)
-}
+  await axios.patch(endpoint, vv);
+};
 
-const deleteChannel: MouseEventHandler<HTMLButtonElement> = () => {
-  const endpoint_del : string = "http://localhost:8080/channels/3" ;
-  const result = axios.delete(endpoint_del);
-}
+const deleteChannel = (id: number) => {
+  console.log('id to delete: ', id);
+  //  const endpoint_del : string = "http://localhost:8080/channels/3" ;
+  const EndpointDel: string = 'http://localhost:8080/channels/' + id;
+  axios.delete(EndpointDel);
+};
 
-const UserCreateForm = (props:any ) => {
-    const [ctype, setCtype] = useState<string_or_null>(null);
+const UserCreateForm = (props: any) => {
+  const [ctype, setCtype] = useState<string_or_null>(null);
 
-    const channel = props.values;
+  const channel = props.values;
 
-    const form = useForm<EditChatType>({
-      initialValues: {
-        channelName: channel.channelName,
-        channelOwner: channel.channelOwner, 
-        password: channel.channelType,
-        channelAdmins: [],
-      }
-    });
+  const form = useForm<EditChatType>({
+    initialValues: {
+      channelName: channel.channelName,
+      channelOwner: channel.channelOwner,
+      password: channel.channelType,
+      channelAdmins: [],
+    },
+  });
 
-    console.log("form" , form.values)
+  console.log('form', form.values);
+  console.log('channel id: ', channel.id);
 
   return (
-    <Box sx={{ maxWidth: 500 }} mx="auto">
-      <form onSubmit={form.onSubmit(async (values, event) => handleSubmit(values, ctype, event, props.ep))}>
+    <Box sx={{ maxWidth: 500 }} mx='auto'>
+      <form
+        onSubmit={form.onSubmit(async (values, event) =>
+          handleSubmit(values, ctype, event, props.ep),
+        )}
+      >
+        <TextInput label='New Channel Name:' {...form.getInputProps('channelName')} />
 
-        <TextInput
-          label="New Channel Name:"
-          {...form.getInputProps('channelName')}
-        />
-
-        <TextInput
-          label="Channel Owner: "
-          {...form.getInputProps('channelOwner')}
-        />
+        <TextInput label='Channel Owner: ' {...form.getInputProps('channelOwner')} />
 
         <Select
-          label="Please Choose Channel Type: "
-          placeholder="Pick one"
+          label='Please Choose Channel Type: '
+          placeholder='Pick one'
           value={ctype}
-          onChange={setCtype}
+          onChange={() => setCtype}
           data={[
             { value: 'public', label: 'Public' },
             { value: 'private', label: 'Private' },
@@ -77,65 +78,67 @@ const UserCreateForm = (props:any ) => {
         />
 
         <PasswordInput
-          label="Password"
-          placeholder="Your password"
+          label='Password'
+          placeholder='Your password'
           required
           {...form.getInputProps('password')}
         />
 
-        <Group position="center" mt="md">
-          <Button type="submit">Save Changes</Button>
-          <Button onClick={deleteChannel}> DELETE </Button>
+        <Group position='center' mt='md'>
+          <Button type='submit'>Save Changes</Button>
+          <Button
+            onClick={() => {
+              deleteChannel(3);
+            }}
+          >
+            {' '}
+            DELETE{' '}
+          </Button>
         </Group>
-
       </form>
     </Box>
-  )
-
-}
+  );
+};
 
 const EditChatForm: FC = () => {
+  const id = '9';
+  const EndpointRead: string = 'http://localhost:8080/channels/' + id;
+  const EndpointWrite: string = 'http://localhost:8080/channels/' + id;
 
-  const id = "3";
-  const endpoint_read : string = "http://localhost:8080/channels/" + id;
-  const endpoint_write : string = "http://localhost:8080/channels/" + id;
-
-  var [channelData, setchannelData] = useState<any>(null);
+  const [channelData, setchannelData] = useState<any>(null);
 
   useEffect(() => {
-    async function fetchData(id: string) {
+    async function fetchData() {
       try {
-          const response = await axios.get(endpoint_read)
-          setchannelData(response.data)
+        const response = await axios.get(EndpointRead);
+        setchannelData(response.data);
       } catch (error) {
         console.error(error);
       }
     }
-    fetchData(id);
-      console.log("Channel Data: ", channelData)
-  },[])
+    fetchData();
+    console.log('id:', id);
+    console.log('Channel Data: ', channelData);
+  }, []);
 
   return (
     <>
-      {!channelData &&
-        <h1> Loading ... </h1>
-      }
-      {channelData &&
-        <UserCreateForm values={channelData} ep={endpoint_write}/>}
+      {!channelData && <h1> Loading ... </h1>}
+      {channelData && <UserCreateForm values={channelData} ep={EndpointWrite} />}
     </>
   );
-}
+};
 
 function EditChannelButton() {
   const [opened, { open, close }] = useDisclosure(false);
 
   return (
     <>
-      <Modal opened={opened} onClose={close} title="Edit Channel Information">
+      <Modal opened={opened} onClose={close} title='Edit Channel Information'>
         <EditChatForm />
       </Modal>
 
-      <Group position="center">
+      <Group position='center'>
         <Button onClick={open}>Edit Channel</Button>
       </Group>
     </>
