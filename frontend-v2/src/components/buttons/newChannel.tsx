@@ -1,67 +1,62 @@
-/* eslint-disable */
-import { FC } from 'react';
-import { Link } from 'react-router-dom';
-import { useForm } from "@mantine/form";
-import { Box, Button, Group, Modal, PasswordInput, TextInput, Avatar, Checkbox, FileInput, FileButton, Select } from '@mantine/core';
-import { FormEvent, useState, useEffect } from "react";
+import { FC, FormEvent, useState } from 'react';
+import { useForm } from '@mantine/form';
+import { Box, Button, Group, Modal, PasswordInput, TextInput, Select } from '@mantine/core';
 import axios from 'axios';
-import { useAuthContext } from '../../hooks/useAuthContext';
 import { useDisclosure } from '@mantine/hooks';
 
 type EditChatType = {
-  channelName: string,
-  channelOwner: string,
-  password: string,
-  channelAdmins: string[]
-}
+  channelName: string;
+  channelOwner: string;
+  password: string;
+  channelAdmins: string[];
+};
 
-type string_or_null =  string | null
+type string_or_null = string | null;
 
-const handleSubmit = async (values: EditChatType, ctype:string_or_null, event: FormEvent<HTMLFormElement>, endpoint_write : string) => {
-  event.preventDefault()
+const handleSubmit = async (
+  values: EditChatType,
+  ctype: string_or_null,
+  event: FormEvent<HTMLFormElement>,
+  EndpointWrite: string,
+) => {
+  event.preventDefault();
 
-  const JSONdata = JSON.stringify(values)
-  const endpoint = endpoint_write 
+  const endpoint = EndpointWrite;
 
-  const vv = {...values, 'channelType' : ctype}
-  console.log('vv: ', vv)
+  const vv = { ...values, channelType: ctype };
+  console.log('vv: ', vv);
 
-  const result = await axios.post(endpoint, vv)
-}
+  await axios.post(endpoint, vv);
+};
 
-const UserCreateForm = (props:any ) => {
-    const [ctype, setCtype] = useState<string_or_null>(null);
+const UserCreateForm = (props: any) => {
+  const [ctype, setCtype] = useState<string_or_null>(null);
 
-    const channel = props.values;
+  const form = useForm<EditChatType>({
+    initialValues: {
+      channelName: '',
+      channelOwner: '',
+      password: '',
+      channelAdmins: [],
+    },
+  });
 
-    const form = useForm<EditChatType>({
-      initialValues: {
-        channelName: '',
-        channelOwner: '', 
-        password: '',
-        channelAdmins: [],
-      }
-    });
-
-    console.log("form" , form.values)
+  console.log('form', form.values);
 
   return (
-    <Box sx={{ maxWidth: 500 }} mx="auto">
-      <form onSubmit={form.onSubmit(async (values, event) => handleSubmit(values, ctype, event, props.ep))}>
+    <Box sx={{ maxWidth: 500 }} mx='auto'>
+      <form
+        onSubmit={form.onSubmit(async (values, event) =>
+          handleSubmit(values, ctype, event, props.ep),
+        )}
+      >
+        <TextInput label='New Channel Name:' {...form.getInputProps('channelName')} />
 
-        <TextInput
-          label="New Channel Name:"
-          {...form.getInputProps('channelName')}
-        />
-
-        <TextInput
-          label="Channel Owner: "
-          {...form.getInputProps('channelOwner')}
-        />
+        <TextInput label='Channel Owner: ' {...form.getInputProps('channelOwner')} />
 
         <Select
-          label="Please Choose Channel Type: "
-          placeholder="Pick one"
+          label='Please Choose Channel Type: '
+          placeholder='Pick one'
           value={ctype}
           onChange={setCtype}
           data={[
@@ -71,46 +66,39 @@ const UserCreateForm = (props:any ) => {
           ]}
         />
 
-        <PasswordInput
-          label="Password"
-          placeholder="Your password"
-          required
-          {...form.getInputProps('password')}
-        />
+        {ctype == 'password' && (
+          <PasswordInput
+            label='Password'
+            placeholder='Your password'
+            required
+            {...form.getInputProps('password')}
+          />
+        )}
 
-        <Group position="center" mt="md">
-          <Button type="submit">Save Changes</Button>
+        <Group position='center' mt='md'>
+          <Button type='submit'>Save Changes</Button>
         </Group>
-
       </form>
     </Box>
-  )
-
-}
+  );
+};
 
 const EditChatForm: FC = () => {
+  const EndpointWrite = 'http://localhost:8080/channels/';
 
-  const endpoint_write : string = "http://localhost:8080/channels/";
-
-  return (
-    <>
-      {
-        <UserCreateForm values='' ep={endpoint_write}/>
-      }
-    </>
-  );
-}
+  return <>{<UserCreateForm values='' ep={EndpointWrite} />}</>;
+};
 
 function NewChannelButton() {
   const [opened, { open, close }] = useDisclosure(false);
 
   return (
     <>
-      <Modal opened={opened} onClose={close} title="Edit Channel Information">
+      <Modal opened={opened} onClose={close} title='Edit Channel Information'>
         <EditChatForm />
       </Modal>
 
-      <Group position="center">
+      <Group position='center'>
         <Button onClick={open}>New Channel</Button>
       </Group>
     </>
