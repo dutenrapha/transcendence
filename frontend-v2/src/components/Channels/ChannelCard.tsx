@@ -2,7 +2,7 @@ import { Card, Text, Badge, Group } from '@mantine/core';
 
 function ChannelCard() {
   return (
-    <Card shadow='sm' padding='lg' radius='md' withBorder>
+    <Card shadow='xl' padding='sm' radius='md' withBorder>
       <Group position='apart' mt='md' mb='xs'>
         <Text weight={500}>Norway Fjord Adventures</Text>
         <Badge color='pink' variant='light'>
