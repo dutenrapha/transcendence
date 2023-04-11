@@ -1,12 +1,15 @@
 import { Card, Text, Badge, Group } from '@mantine/core';
 
-function ChannelCard() {
+function ChannelCard(props: any) {
+  const channel = props.values;
+  console.log('channel:', channel);
+
   return (
     <Card shadow='xl' padding='sm' radius='md' withBorder>
       <Group position='apart' mt='md' mb='xs'>
-        <Text weight={500}>Norway Fjord Adventures</Text>
+        <Text weight={500}>{channel.name}</Text>
         <Badge color='pink' variant='light'>
-          On Sale
+          {channel.channelType}
         </Badge>
       </Group>
     </Card>
