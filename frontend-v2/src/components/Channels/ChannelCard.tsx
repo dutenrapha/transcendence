@@ -20,7 +20,8 @@ function ChannelCard(props: any) {
   };
 
   const ProcessClick = () => {
-    console.log('clickou');
+    if (channelType == 'Password') alert('protegido');
+    else alert('publico');
   };
 
   return (
