@@ -19,8 +19,12 @@ function ChannelCard(props: any) {
     fontWeight: 'bold',
   };
 
+  const ProcessClick = () => {
+    console.log('clickou');
+  };
+
   return (
-    <Card style={cardStyle} shadow='xl' padding='sm' radius='md' withBorder>
+    <Card style={cardStyle} onClick={ProcessClick} shadow='xl' padding='sm' radius='md' withBorder>
       <Group position='apart' mt='md' mb='xs'>
         <Text style={textStyle} weight={500}>
           {name}
