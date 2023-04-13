@@ -12,7 +12,7 @@ function ChannelCard(props: any) {
   const [opened, { open, close }] = useDisclosure(false);
   const [value, setValue] = useState(null);
 
-  //  console.log('channel:', channel);
+  console.log('channel:', channel);
   //  console.log('pass: ', password);
 
   const cardStyle = {
@@ -32,6 +32,8 @@ function ChannelCard(props: any) {
   const PasswordForm: FC = () => {
     const handleSubmit = (values: { password: string }) => {
       console.log('values: ', values);
+      if (values.password == password) alert('Bem vindo ao chat !');
+      else alert('Senha incorreta');
     };
 
     const form = useForm<{ password: string }>({
